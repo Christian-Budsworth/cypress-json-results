@@ -1,6 +1,6 @@
 {
   "name": "cypress-json-results",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A cypress json reporter that does not block the cypress event stream",
   "main": "src",
   "files": [
