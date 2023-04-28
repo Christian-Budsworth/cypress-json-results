@@ -20,6 +20,9 @@ class CypressReport {
 
   beforeRunHandler() {
     this.allResults = {}
+    this.testReport = {
+      results: [],
+    };
   }
 
   afterSpecHandler(spec, results) {
@@ -32,11 +35,23 @@ class CypressReport {
     })
   }
 
+  afterSpecWithDuration(spec, results) {
+    // shortcut
+    results.tests.forEach(t => {
+      console.log(t)
+      console.log("t.attempts[0]", t.attempts[0])
+      const result = {
+        feature: spec.relative,
+        scenario: t.title.join(' '),
+        state: t.state,
+        duration: t.attempts[0]?.timings?.test?.fnDuration ?? 0,
+      };
+      this.testReport.results.push(result);
+    });
+  }
+
   afterRunHandler(afterRun) {
-    // add the totals to the results
-    // explanation of test statuses in the blog post
-    // https://glebbahmutov.com/blog/cypress-test-statuses/
-    this.allResults.totals = {
+    const totals = {
       suites: afterRun.totalSuites,
       tests: afterRun.totalTests,
       failed: afterRun.totalFailed,
@@ -44,6 +59,24 @@ class CypressReport {
       pending: afterRun.totalPending,
       skipped: afterRun.totalSkipped,
     }
+    if (this.allResults) {
+      this.allResults.totals = totals
+      const str = JSON.stringify(this.allResults, null, 2)
+      fs.writeFileSync(`${this.options.folder}/${this.options.filename}`, `${str}\n`);
+      console.log('cypress-json-results: wrote results to %s', this.options.filename)
+  
+    }
+    if (this.testReport) {
+      this.testReport.totals = totals
+      const str = JSON.stringify(this.testReport, null, 2)
+      fs.writeFileSync(
+        `${this.options.folder}/` + `test-report-services-${this.options.filename}`,
+        `${str}\n`,
+      );
+      console.log('cypress-json-results: wrote results to %s', this.options.filename)
+
+    }
+
 
     const str = JSON.stringify(this.allResults, null, 2)
     fs.writeFileSync(this.options.filename, str + '\n')

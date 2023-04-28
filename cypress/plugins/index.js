@@ -14,7 +14,7 @@ module.exports = (on, config) => {
   });
 
   on("after:spec", (spec, results) => {
-    cypressJSONReport.afterSpecHandler(spec, results);
+    cypressJSONReport.afterSpecWithDuration(spec, results);
   });
 
   on("after:run", (results) => {

@@ -1,6 +1,6 @@
 {
-  "name": "cypress-json-results",
-  "version": "0.0.2",
+  "name": "cypress-json-results-non-blocking",
+  "version": "0.2.0",
   "description": "A cypress json reporter that does not block the cypress event stream",
   "main": "src",
   "files": [
@@ -13,7 +13,7 @@
   "keywords": [
     "cypress-plugin"
   ],
-  "author": "Gleb Bahmutov, Christian Budsworth",
+  "author": "Christian Budsworth",
   "license": "MIT",
   "devDependencies": {
     "cypress": "9.5.3",
